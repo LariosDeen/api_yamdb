@@ -1,15 +1,16 @@
+import random
+
+from django.contrib.auth import get_user_model
+from django.core.mail import send_mail
+from django.shortcuts import get_object_or_404
+from rest_framework import serializers, status
+from rest_framework.permissions import AllowAny
+from rest_framework.response import Response
+from rest_framework.views import APIView
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
-from django.contrib.auth import get_user_model
-from django.shortcuts import get_object_or_404
+
 from .serializers import CredentialsSerializer
-from rest_framework.response import Response
-from rest_framework import status
-from rest_framework.views import APIView
-import random
-from django.core.mail import send_mail
-from rest_framework import serializers
-from rest_framework.permissions import AllowAny
 
 User = get_user_model()
 
@@ -53,7 +54,7 @@ class SignUp(APIView):
 
 
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
-    
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['confirmation_code'] = serializers.CharField(required=True)
@@ -75,6 +76,7 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
         data["access"] = str(refresh.access_token)
 
         return data
+
 
 class MyTokenObtainPairView(TokenObtainPairView):
     permission_classes = [AllowAny]
