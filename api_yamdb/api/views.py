@@ -51,3 +51,8 @@ class MyTokenObtainPairView(TokenObtainPairView):
     "Обработка выдачи токенов."
     permission_classes = [AllowAny]
     serializer_class = MyTokenObtainPairSerializer
+
+
+class UsersViewSet(viewsets.ModelViewSet):
+    serializer_class = CredentialsSerializer
+    queryset = User.objects.all()

@@ -19,6 +19,20 @@ class CredentialsSerializer(serializers.ModelSerializer):
 
         }
 
+    def validate_email(self, value):
+        email = value.lower()
+        if User.objects.filter(email=email).exists():
+            raise serializers.ValidationError(
+                "Пользователь с таким email уже существует.")
+        return email
+
+    def validate_username(self, value):
+        username_me = value.lower()
+        if 'me' == username_me:
+            raise serializers.ValidationError(
+                f'Создание Пользователя c username "{username_me}" запрещено')
+        return value
+
 
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
 
