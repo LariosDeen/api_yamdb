@@ -13,7 +13,10 @@ class CredentialsSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ('email', 'username')
+        # fields = '__all__'
+        # fields = ['username', 'email', 'role',
+        #           'bio', 'first_name', 'last_name']
+        fields = ['username', 'email']
         extra_kwargs = {
             'password': {'required': False},
 
@@ -32,6 +35,13 @@ class CredentialsSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError(
                 f'Создание Пользователя c username "{username_me}" запрещено')
         return value
+
+
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['username', 'email', 'role',
+                  'bio', 'first_name', 'last_name']
 
 
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):

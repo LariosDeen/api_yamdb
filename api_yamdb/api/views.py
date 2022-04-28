@@ -2,12 +2,16 @@ import random
 
 from django.contrib.auth import get_user_model
 from django.core.mail import send_mail
-from rest_framework import status, viewsets
+from rest_framework import filters, status, viewsets
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework_simplejwt.views import TokenObtainPairView
 
-from .serializers import CredentialsSerializer, MyTokenObtainPairSerializer
+from .serializers import (
+    CredentialsSerializer,
+    MyTokenObtainPairSerializer,
+    UserSerializer,
+)
 
 User = get_user_model()
 
@@ -54,5 +58,7 @@ class MyTokenObtainPairView(TokenObtainPairView):
 
 
 class UsersViewSet(viewsets.ModelViewSet):
-    serializer_class = CredentialsSerializer
+    serializer_class = UserSerializer
     queryset = User.objects.all()
+    filter_backends = (filters.SearchFilter,)
+    search_fields = ('=username',)
