@@ -2,8 +2,8 @@ from django.db import models
 
 
 class Category(models.Model):
-    name = models.CharField(max_length=200)
-    slug = models.SlugField(unique=True)
+    name = models.CharField(max_length=256)
+    slug = models.SlugField(unique=True, max_length=50)
 
     class Meta:
         ordering = ('slug',)
@@ -15,8 +15,8 @@ class Category(models.Model):
 
 
 class Genre(models.Model):
-    name = models.CharField(max_length=200)
-    slug = models.SlugField(unique=True)
+    name = models.CharField(max_length=256)
+    slug = models.SlugField(unique=True, max_length=50)
 
     class Meta:
         ordering = ('slug',)
@@ -28,13 +28,13 @@ class Genre(models.Model):
 
 
 class Title(models.Model):
-    name = models.CharField(max_length=200)
+    name = models.CharField(max_length=256)
     year = models.IntegerField(verbose_name='Дата выхода')
     category = models.ForeignKey(Category,
                                  verbose_name='Категория',
                                  related_name='titles',
                                  on_delete=models.SET_NULL,
-                                 null=True, blank=True)
+                                 null=True)
     description = models.TextField('Описание произведения',
                                    null=True, blank=True)
     genre = models.ManyToManyField(Genre, through='GenreTitle',
