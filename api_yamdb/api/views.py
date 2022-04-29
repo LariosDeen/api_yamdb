@@ -8,7 +8,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_simplejwt.views import TokenObtainPairView
 
-from .permissions import IsAdministratorRole, UserNotChangeRole
+from .permissions import IsAdministratorRole
 from .serializers import (
     CredentialsSerializer,
     MyTokenObtainPairSerializer,
@@ -69,7 +69,7 @@ class UsersViewSet(viewsets.ModelViewSet):
 
 
 class Me(APIView):
-    permission_classes = (UserNotChangeRole, IsAuthenticated)
+    permission_classes = (IsAuthenticated,)
 
     def get(self, request):
         user = User.objects.get(username=request.user)
