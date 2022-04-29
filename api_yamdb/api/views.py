@@ -3,10 +3,12 @@ import random
 from django.contrib.auth import get_user_model
 from django.core.mail import send_mail
 from rest_framework import filters, status, viewsets
-from rest_framework.permissions import AllowAny
+from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
+from rest_framework.views import APIView
 from rest_framework_simplejwt.views import TokenObtainPairView
 
+from .permissions import IsAdministratorRole, UserNotChangeRole
 from .serializers import (
     CredentialsSerializer,
     MyTokenObtainPairSerializer,
@@ -58,7 +60,27 @@ class MyTokenObtainPairView(TokenObtainPairView):
 
 
 class UsersViewSet(viewsets.ModelViewSet):
+    lookup_field = 'username'
     serializer_class = UserSerializer
     queryset = User.objects.all()
     filter_backends = (filters.SearchFilter,)
     search_fields = ('=username',)
+    permission_classes = (IsAdministratorRole,)
+
+
+class Me(APIView):
+    permission_classes = (UserNotChangeRole, IsAuthenticated)
+
+    def get(self, request):
+        user = User.objects.get(username=request.user)
+        serializer = UserSerializer(user, many=False)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    def patch(self, request):
+        user = User.objects.get(username=request.user)
+        serializer = UserSerializer(
+            user, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
