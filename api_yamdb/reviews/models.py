@@ -1,18 +1,12 @@
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
 
-# from django.contrib.auth import get_user_model
-#
-#
-# User = get_user_model()
-#
-#
-# class Title(models.Model):
-#     text = models.TextField(max_length=500, verbose_name='Текст произведения')
+from titles.models import Title
+from users.models import User
 
 
 class Review(models.Model):
-    title_id = models.ForeignKey(
+    title = models.ForeignKey(
         Title, on_delete=models.CASCADE, related_name='reviews',
         verbose_name='Название произведения'
     )
@@ -48,7 +42,7 @@ class Review(models.Model):
 
 
 class Comment(models.Model):
-    review_id = models.ForeignKey(
+    review = models.ForeignKey(
         Review, on_delete=models.CASCADE, related_name='comments',
         verbose_name='Комментарий к отзыву'
     )
