@@ -51,7 +51,8 @@ class UserSerializer(serializers.ModelSerializer):
         return email
 
     def validate_role(self, value):
-        # TODO: Тесты проходит, но не уверенб, что так делать корректно
+        # TODO: Тесты проходит, но не уверен, что так делать идейно корректно
+        # Если приходит роль отличная от текущей, то возвразаюем текущую
         if self.instance and value != self.instance.role:
             return self.instance.role
         return value
