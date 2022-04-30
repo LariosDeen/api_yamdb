@@ -1,14 +1,14 @@
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
 
-# from django.contrib.auth import get_user_model
-#
-#
-# User = get_user_model()
-#
-#
-# class Title(models.Model):
-#     text = models.TextField(max_length=500, verbose_name='Текст произведения')
+from django.contrib.auth import get_user_model
+
+
+User = get_user_model()
+
+
+class Title(models.Model):
+    text = models.TextField(max_length=500, verbose_name='Текст произведения')
 
 
 class Review(models.Model):
@@ -21,7 +21,7 @@ class Review(models.Model):
         User, on_delete=models.CASCADE, related_name='reviews',
         verbose_name='Автор отзыва'
     )
-    score = models.IntegerField (
+    score = models.IntegerField(
         default=5,
         validators=[
             MinValueValidator(limit_value=1, message='Минимальная оценка 1'),
