@@ -9,4 +9,3 @@ class IsAdministratorRole(permissions.BasePermission):
             and request.user.role == 'admin'
             or request.user.is_superuser
         )
-
