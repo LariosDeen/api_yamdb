@@ -6,7 +6,7 @@ from users.models import User
 
 
 class Review(models.Model):
-    title = models.ForeignKey(
+    title_id = models.ForeignKey(
         Title, on_delete=models.CASCADE, related_name='reviews',
         verbose_name='Название произведения'
     )
@@ -42,7 +42,7 @@ class Review(models.Model):
 
 
 class Comment(models.Model):
-    review = models.ForeignKey(
+    review_id = models.ForeignKey(
         Review, on_delete=models.CASCADE, related_name='comments',
         verbose_name='Комментарий к отзыву'
     )

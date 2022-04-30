@@ -13,9 +13,6 @@ class CredentialsSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        # fields = '__all__'
-        # fields = ['username', 'email', 'role',
-        #           'bio', 'first_name', 'last_name']
         fields = ['username', 'email']
         extra_kwargs = {
             'password': {'required': False},
@@ -38,10 +35,27 @@ class CredentialsSerializer(serializers.ModelSerializer):
 
 
 class UserSerializer(serializers.ModelSerializer):
+    email = serializers.EmailField(
+        required=True)
+
     class Meta:
         model = User
         fields = ['username', 'email', 'role',
                   'bio', 'first_name', 'last_name']
+
+    def validate_email(self, value):
+        email = value.lower()
+        if User.objects.filter(email=email).exists():
+            raise serializers.ValidationError(
+                "Пользователь с таким email уже существует.")
+        return email
+
+    def validate_role(self, value):
+        # TODO: Тесты проходит, но не уверен, что так делать идейно корректно
+        # Если приходит роль отличная от текущей, то возвразаюем текущую
+        if self.instance and value != self.instance.role:
+            return self.instance.role
+        return value
 
 
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):

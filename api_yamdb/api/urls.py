@@ -18,6 +18,7 @@ router.register(
     CommentViewSet, basename='comments'
 )
 
+
 urlpatterns = [
     path('v1/', include(router.urls)),
     path('v1/auth/token/', MyTokenObtainPairView.as_view(),
@@ -25,4 +26,5 @@ urlpatterns = [
     path('v1/auth/token/refresh/',
          TokenRefreshView.as_view(),
          name='token_refresh'),
+
 ]
