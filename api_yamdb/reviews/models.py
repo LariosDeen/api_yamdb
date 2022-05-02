@@ -6,7 +6,7 @@ from users.models import User
 
 
 class Review(models.Model):
-    title_id = models.ForeignKey(
+    title = models.ForeignKey(
         Title, on_delete=models.CASCADE, related_name='reviews',
         verbose_name='Название произведения'
     )
@@ -16,7 +16,6 @@ class Review(models.Model):
         verbose_name='Автор отзыва'
     )
     score = models.IntegerField (
-        default=5,
         validators=[
             MinValueValidator(limit_value=1, message='Минимальная оценка 1'),
             MaxValueValidator(limit_value=10, message='Максимальная оценка 10')
@@ -36,13 +35,13 @@ class Review(models.Model):
         verbose_name_plural = 'Отзывы'
         constraints = [
             models.UniqueConstraint(
-                fields=['title_id', 'author'], name='unique_review_author'
+                fields=['title', 'author'], name='unique_review_author'
             )
         ]
 
 
 class Comment(models.Model):
-    review_id = models.ForeignKey(
+    review = models.ForeignKey(
         Review, on_delete=models.CASCADE, related_name='comments',
         verbose_name='Комментарий к отзыву'
     )
