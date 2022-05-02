@@ -13,6 +13,7 @@ from .serializers import (
     CredentialsSerializer,
     MyTokenObtainPairSerializer,
     UserSerializer,
+    UserRoleSerializer,
 )
 
 User = get_user_model()
@@ -74,7 +75,7 @@ class UsersViewSet(viewsets.ModelViewSet):
     def me_user(self, request, pk=None):
         """Обработка узла users/me"""
         user = User.objects.get(username=request.user)
-        serializer = UserSerializer(
+        serializer = UserRoleSerializer(
             user, data=request.data, partial=True)
         if serializer.is_valid():
             serializer.save()
