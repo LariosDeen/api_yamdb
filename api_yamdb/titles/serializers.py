@@ -40,6 +40,9 @@ class PostTitleSerializer(serializers.ModelSerializer):
 
 
 class GetTitleSerializer(serializers.ModelSerializer):
+    rating = serializers.IntegerField(
+        source='reviews__score__avg', read_only=True
+    )
     genre = GenreSerializer(many=True)
     category = CategorySerializer(read_only=True)
 

@@ -39,6 +39,9 @@ class Title(models.Model):
                                    null=True, blank=True)
     genre = models.ManyToManyField(Genre, through='GenreTitle',
                                    verbose_name='Жанр')
+    rating = models.IntegerField(verbose_name='Рейтинг',
+                                 null=True,
+                                 default=None)
 
     class Meta:
         ordering = ('name',)
