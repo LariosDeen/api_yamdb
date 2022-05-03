@@ -3,10 +3,14 @@ from rest_framework.routers import DefaultRouter
 from rest_framework_simplejwt.views import TokenRefreshView
 
 from .views import MyTokenObtainPairView, SignUpViewSet, UsersViewSet
+from titles.views import CategoryViewSet, GenreViewSet, TitleViewSet
 
 app_name = "api"
 
 router = DefaultRouter()
+router.register('categories', CategoryViewSet, basename='categories')
+router.register('genres', GenreViewSet, basename='genres')
+router.register('titles', TitleViewSet, basename='titles')
 router.register('auth/signup', SignUpViewSet, basename='signup')
 router.register('users', UsersViewSet, basename='users')
 
