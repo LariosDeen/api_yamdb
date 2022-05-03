@@ -34,6 +34,14 @@ class CredentialsSerializer(serializers.ModelSerializer):
         return value
 
 
+class UserRoleSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['username', 'email', 'role',
+                  'bio', 'first_name', 'last_name']
+        read_only_fields = ['role']
+
+
 class UserSerializer(serializers.ModelSerializer):
     email = serializers.EmailField(
         required=True)
@@ -49,13 +57,6 @@ class UserSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError(
                 "Пользователь с таким email уже существует.")
         return email
-
-    def validate_role(self, value):
-        # TODO: Тесты проходит, но не уверен, что так делать идейно корректно
-        # Если приходит роль отличная от текущей, то возвразаюем текущую
-        if self.instance and value != self.instance.role:
-            return self.instance.role
-        return value
 
 
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
