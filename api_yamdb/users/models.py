@@ -26,3 +26,5 @@ class User(AbstractUser):
             models.UniqueConstraint(
                 fields=['username', 'email'], name='unique_user_email'),
         ]
+
+        ordering = ['id']
