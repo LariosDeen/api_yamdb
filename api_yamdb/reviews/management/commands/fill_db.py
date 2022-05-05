@@ -2,10 +2,9 @@
 
 from django.core.management import BaseCommand
 
-from reviews.models import Review, Comment
-from titles.models import Title, Category, Genre, GenreTitle
-from users.models import User
-
+from reviews.models import (
+    User, Title, Category, Genre, GenreTitle, Review, Comment
+)
 
 CSV_FILES = [
     ['users.csv', User],
