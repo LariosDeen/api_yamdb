@@ -1,5 +1,3 @@
-import datetime as dt
-
 from django.contrib.auth import get_user_model
 from django.shortcuts import get_object_or_404
 from rest_framework import serializers
@@ -116,13 +114,6 @@ class PostTitleSerializer(serializers.ModelSerializer):
     class Meta:
         fields = '__all__'
         model = Title
-
-    def validate_year(self, value):
-        if dt.date.today().year < value and value > 0:
-            raise serializers.ValidationError(
-                'Неправильно указан год'
-            )
-        return value
 
 
 class GetTitleSerializer(serializers.ModelSerializer):
