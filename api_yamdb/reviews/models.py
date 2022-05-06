@@ -2,6 +2,8 @@ from django.contrib.auth.models import AbstractUser
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 
+from .validators import validate_year
+
 
 class User(AbstractUser):
     USER_ROLE = 'user'
@@ -40,8 +42,14 @@ class User(AbstractUser):
 
 
 class Category(models.Model):
-    name = models.CharField(max_length=256)
-    slug = models.SlugField(unique=True, max_length=50)
+    name = models.CharField(
+        verbose_name='Название категории',
+        max_length=256
+    )
+    slug = models.SlugField(
+        verbose_name='Идентификатор',
+        unique=True, max_length=50
+    )
 
     class Meta:
         ordering = ('slug',)
@@ -53,8 +61,14 @@ class Category(models.Model):
 
 
 class Genre(models.Model):
-    name = models.CharField(max_length=256)
-    slug = models.SlugField(unique=True, max_length=50)
+    name = models.CharField(
+        verbose_name='Название жанра',
+        max_length=256
+    )
+    slug = models.SlugField(
+        verbose_name='Идентификатор',
+        unique=True, max_length=50
+    )
 
     class Meta:
         ordering = ('slug',)
@@ -66,20 +80,38 @@ class Genre(models.Model):
 
 
 class Title(models.Model):
-    name = models.CharField(max_length=256)
-    year = models.IntegerField(verbose_name='Дата выхода')
+    name = models.CharField(
+        verbose_name='Название произведения',
+        max_length=256
+    )
+    year = models.IntegerField(
+        verbose_name='Дата выхода',
+        validators=[validate_year],
+        db_index=True
+    )
     category = models.ForeignKey(
-        Category, verbose_name='Категория', related_name='titles',
-        on_delete=models.SET_NULL, null=True
+        Category, verbose_name='Категория',
+        related_name='titles',
+        on_delete=models.SET_NULL,
+        null=True,
+        db_index=True
     )
     description = models.TextField(
-        'Описание произведения', null=True, blank=True
+        'Описание произведения',
+        null=True,
+        blank=True
     )
     genre = models.ManyToManyField(
-        Genre, through='GenreTitle', verbose_name='Жанр'
+        Genre, through='GenreTitle',
+        verbose_name='Жанр',
+        db_index=True
     )
     rating = models.IntegerField(
-        verbose_name='Рейтинг', null=True, default=None)
+        verbose_name='Рейтинг',
+        null=True,
+        default=None,
+        db_index=True
+    )
 
     class Meta:
         ordering = ('name',)
@@ -92,11 +124,15 @@ class Title(models.Model):
 
 class GenreTitle(models.Model):
     title = models.ForeignKey(
-        Title, on_delete=models.SET_NULL, verbose_name='Произведение',
-        blank=True, null=True
+        Title, on_delete=models.SET_NULL,
+        verbose_name='Произведение',
+        blank=True,
+        null=True
     )
     genre = models.ForeignKey(
-        Genre, on_delete=models.SET_NULL, verbose_name='Жанр', blank=True,
+        Genre, on_delete=models.SET_NULL,
+        verbose_name='Жанр',
+        blank=True,
         null=True
     )
 
