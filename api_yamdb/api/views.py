@@ -13,7 +13,6 @@ from rest_framework.response import Response
 from rest_framework_simplejwt.views import TokenObtainPairView
 
 from reviews.models import Category, Genre, Review, Title
-
 from .filters import TitleFilter
 from .mixins import CreateListDeleteViewSet
 from .permissions import (

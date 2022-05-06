@@ -31,22 +31,21 @@ router.register(
 auth_endpoints = [
     path(
         'token/',
-         MyTokenObtainPairView.as_view(),
-         name='token_obtain_pair'
+        MyTokenObtainPairView.as_view(),
+        name='token_obtain_pair'
     ),
     path(
         'signup/',
-         SignUpViewSet.as_view({'post': 'create'})
+        SignUpViewSet.as_view({'post': 'create'})
     ),
     path(
         'token/refresh/',
-         TokenRefreshView.as_view(),
-         name='token_refresh'
+        TokenRefreshView.as_view(),
+        name='token_refresh'
     )
 ]
 
 urlpatterns = [
     path('v1/', include(router.urls)),
-    path('v1/auth/', include(auth_endpoints)),
-
+    path('v1/auth/', include(auth_endpoints))
 ]
