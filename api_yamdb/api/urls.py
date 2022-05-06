@@ -3,8 +3,14 @@ from rest_framework.routers import DefaultRouter
 from rest_framework_simplejwt.views import TokenRefreshView
 
 from api.views import (
-    ReviewViewSet, CommentViewSet, MyTokenObtainPairView, SignUpViewSet,
-    UsersViewSet, CategoryViewSet, GenreViewSet, TitleViewSet
+    CategoryViewSet,
+    CommentViewSet,
+    GenreViewSet,
+    MyTokenObtainPairView,
+    ReviewViewSet,
+    SignUpViewSet,
+    TitleViewSet,
+    UsersViewSet,
 )
 
 app_name = 'api'
@@ -13,7 +19,6 @@ router = DefaultRouter()
 router.register('categories', CategoryViewSet, basename='categories')
 router.register('genres', GenreViewSet, basename='genres')
 router.register('titles', TitleViewSet, basename='titles')
-router.register('auth/signup', SignUpViewSet, basename='signup')
 router.register('users', UsersViewSet, basename='users')
 router.register(
     r'titles/(?P<title_id>\d+)/reviews', ReviewViewSet, basename='reviews'
@@ -23,12 +28,19 @@ router.register(
     CommentViewSet, basename='comments'
 )
 
-urlpatterns = [
-    path('v1/', include(router.urls)),
-    path('v1/auth/token/', MyTokenObtainPairView.as_view(),
+auth_endpoints = [
+    path('token/',
+         MyTokenObtainPairView.as_view(),
          name='token_obtain_pair'),
-    path('v1/auth/token/refresh/',
+    path('signup/',
+         SignUpViewSet.as_view({'post': 'create'})),
+    path('token/refresh/',
          TokenRefreshView.as_view(),
          name='token_refresh'),
+]
+
+urlpatterns = [
+    path('v1/', include(router.urls)),
+    path('v1/auth/', include(auth_endpoints)),
 
 ]

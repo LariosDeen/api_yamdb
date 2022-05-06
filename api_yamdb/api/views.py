@@ -1,31 +1,37 @@
-import random
+import uuid
 
+from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.core.mail import send_mail
 from django.db.models import Avg
 from django_filters.rest_framework import DjangoFilterBackend
-from rest_framework import viewsets, status, filters
+from rest_framework import filters, status, viewsets
 from rest_framework.decorators import action
 from rest_framework.generics import get_object_or_404
-from rest_framework.permissions import AllowAny
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework_simplejwt.views import TokenObtainPairView
 
 from reviews.models import Category, Genre, Review, Title
+
 from .filters import TitleFilter
 from .mixins import CreateListDeleteViewSet
 from .permissions import (
-    IsAdministratorRole, IsAdminOrReadOnly,
-    IsSuperuserAdminModeratorAuthorOrReadOnly
+    IsAdministratorRole,
+    IsAdminOrReadOnly,
+    IsSuperuserAdminModeratorAuthorOrReadOnly,
 )
 from .serializers import (
-    CategorySerializer, GenreSerializer, PostTitleSerializer,
-    GetTitleSerializer
-)
-from .serializers import (
-    CredentialsSerializer, MyTokenObtainPairSerializer, UserSerializer,
-    UserRoleSerializer, ReviewSerializer, CommentSerializer
+    CategorySerializer,
+    CommentSerializer,
+    CredentialsSerializer,
+    GenreSerializer,
+    GetTitleSerializer,
+    MyTokenObtainPairSerializer,
+    PostTitleSerializer,
+    ReviewSerializer,
+    UserRoleSerializer,
+    UserSerializer,
 )
 
 User = get_user_model()
@@ -47,13 +53,13 @@ class SignUpViewSet(viewsets.ModelViewSet):
         serializer = CredentialsSerializer(data=request.data)
         if serializer.is_valid():
             # Код подтверждения
-            confirmation_code = random.randrange(1111, 9999)
+            confirmation_code = uuid.uuid4()
             serializer.save(confirmation_code=confirmation_code)
 
             # Отправка письма
             mail_text = f'Код подтверждения {confirmation_code}'
             mail_theme = 'Код подтверждения'
-            mail_from = 'from@example.com'
+            mail_from = settings.MAIL_FROM
             mail_to = serializer.data['email']
             send_mail(
                 mail_theme, mail_text, mail_from, [mail_to],
