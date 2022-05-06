@@ -29,14 +29,20 @@ router.register(
 )
 
 auth_endpoints = [
-    path('token/',
+    path(
+        'token/',
          MyTokenObtainPairView.as_view(),
-         name='token_obtain_pair'),
-    path('signup/',
-         SignUpViewSet.as_view({'post': 'create'})),
-    path('token/refresh/',
+         name='token_obtain_pair'
+    ),
+    path(
+        'signup/',
+         SignUpViewSet.as_view({'post': 'create'})
+    ),
+    path(
+        'token/refresh/',
          TokenRefreshView.as_view(),
-         name='token_refresh'),
+         name='token_refresh'
+    )
 ]
 
 urlpatterns = [

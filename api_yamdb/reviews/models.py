@@ -10,9 +10,9 @@ class User(AbstractUser):
     ROLES = [
         (USER_ROLE, 'User'),
         (ADMIN_ROLE, 'Administrator'),
-        (MODERATOR_ROLE, 'Moderator'),
-
+        (MODERATOR_ROLE, 'Moderator')
     ]
+
     bio = models.TextField('Биография', blank=True)
     confirmation_code = models.CharField(
         'Код подтверждения', blank=True, max_length=50
