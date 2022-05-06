@@ -101,7 +101,7 @@ class Review(models.Model):
         User, on_delete=models.CASCADE, related_name='reviews',
         verbose_name='Автор отзыва'
     )
-    score = models.IntegerField(
+    score = models.PositiveSmallIntegerField(
         validators=[
             MinValueValidator(limit_value=1, message='Минимальная оценка 1'),
             MaxValueValidator(limit_value=10, message='Максимальная оценка 10')
@@ -112,9 +112,6 @@ class Review(models.Model):
         auto_now_add=True, verbose_name='Дата публикации отзыва'
     )
 
-    def __str__(self):
-        return self.text[:10]
-
     class Meta:
         ordering = ['id']
         verbose_name = 'Отзыв'
@@ -124,6 +121,9 @@ class Review(models.Model):
                 fields=['title', 'author'], name='unique_review_author'
             )
         ]
+
+    def __str__(self):
+        return self.text[:10]
 
 
 class Comment(models.Model):
@@ -140,10 +140,10 @@ class Comment(models.Model):
         auto_now_add=True, verbose_name='Дата публикации комментария'
     )
 
-    def __str__(self):
-        return self.text[:10]
-
     class Meta:
         ordering = ['id']
         verbose_name = 'Комментарий к отзывам'
         verbose_name_plural = 'Комментарии к отзывам'
+
+    def __str__(self):
+        return self.text[:10]

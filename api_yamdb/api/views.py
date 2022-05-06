@@ -85,8 +85,7 @@ class UsersViewSet(viewsets.ModelViewSet):
     def me_user(self, request, pk=None):
         """Обработка узла users/me"""
         user = User.objects.get(username=request.user)
-        serializer = UserRoleSerializer(
-            user, data=request.data, partial=True)
+        serializer = UserRoleSerializer(user, data=request.data, partial=True)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_200_OK)
