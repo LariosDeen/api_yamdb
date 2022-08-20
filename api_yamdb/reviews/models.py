@@ -103,17 +103,21 @@ class Title(models.Model):
 
 
 class GenreTitle(models.Model):
-    title = models.ForeignKey(
-        Title, on_delete=models.SET_NULL, verbose_name='Произведение',
-        blank=True, null=True
-    )
     genre = models.ForeignKey(
-        Genre, on_delete=models.SET_NULL, verbose_name='Жанр', blank=True,
-        null=True
+        'Genre', on_delete=models.SET_NULL, null=True, blank=True,
+        verbose_name='Жанр'
+    )
+    title = models.ForeignKey(
+        'Title', on_delete=models.CASCADE, verbose_name='Произведение'
     )
 
+    class Meta:
+        ordering = ('title',)
+        verbose_name = 'Жанр произведения'
+        verbose_name_plural = 'Жанры произведений'
+
     def __str__(self):
-        return self.genre
+        return f'{self.title} {self.genre}'
 
 
 class Review(models.Model):
